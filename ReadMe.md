@@ -35,13 +35,48 @@ A Python-based toolbox using  **FLIR/Blackfly** camera, initially for neuroscien
 - For DAQ version: `nidaqmx`
 - For Arduino version: standard `pyserial`
 
+
 ---
 
 ## 📦 Installation
 
 We recommend creating a conda environment:
+in an anaconda command prompt, type: 
 
 ```bash
-conda create -n camrec python=3.9
-conda activate camrec
+conda create -n TrigVideoCapture python=3.9
+conda activate TrigVideoCapture
+cd PathToThetoolbox
 pip install -r requirements.txt
+```
+
+---
+
+
+## 🚀  Use
+
+Camera is fully parametrized in Spinnaker SDK GUI (frame rate, exposure time, etc... ) 
+After activation of the environment in the anaconda command prompt :
+
+```bash
+conda activate TrigVideoCapture
+cd PathToThetoolbox
+```
+
+run the file accorindng to your setup
+
+```bash
+python Display_Record_Arduino_AIO.py
+```
+
+or
+
+```bash
+python Display_Record_DAQmx_AIO.py
+```
+
+The software will prompt you to choose a folder and filename to save output. 
+A window will open with 20Hz dipslay, and camera video is saved at the set framerate ( set in spinnaker SDK) an additional metadata file is daved along with the video with the same name 
+
+to exit the program, simply press "q" with the video display window active 
+emergency stop the program by pressing Ctrl-C in the command bash  
