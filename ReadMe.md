@@ -26,9 +26,9 @@ A Python-based toolbox using  **FLIR/Blackfly** camera, initially for neuroscien
 
 ## 🧰 Requirements
 
-- Python 3.8+ (conda recommended)
+- Python 3.10 (conda recommended)
 - [FLIR Spinnaker SDK](https://www.flir.com/products/spinnaker-sdk/)
-- PySpin (installed from SDK)
+- PySpin (installed from SDK)      ---- >> SEE BELOW additional instruction 
 - OpenCV
 - numpy
 - tkinter (bundled with Python)
@@ -40,13 +40,24 @@ A Python-based toolbox using  **FLIR/Blackfly** camera, initially for neuroscien
 
 ## 📦 Installation
 
-We recommend creating a conda environment:
-in an anaconda command prompt, type: 
+We recommend creating a conda environment  :
+in an anaconda command prompt ( !!! start promtp as administrator on windows !!!), type: 
 
 ```bash
-conda create -n TrigVideoCapture python=3.9
+conda create -n TrigVideoCapture python=3.10
 conda activate TrigVideoCapture
 cd PathToThetoolbox
+# recommend installing spinnaker sdk at that moment 
+pip install "YOURPATH\spinnaker_python-4.2.0.88-cp310-cp310-win_amd64.whl"
+# test installation pf PySpin
+python -c "import PySpin; print('PySpin OK')"
+```
+
+
+---
+
+
+```bash 
 pip install -r requirements.txt
 ```
 
