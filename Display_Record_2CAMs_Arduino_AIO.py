@@ -22,10 +22,6 @@ DEFAULT_START_DIR = r"C:\Users\Behavior4\Documents\Camera_Recordings"
 # BASE_NAME = "PMtest2"
 DISPLAY_FPS = 20.0  # Live display
 
-# not in use 
-# DAQ_DEVICE = "Dev2"
-# DAQ_CHANNEL = "ai1"
-# DAQ_SAMPLING_RATE = 10000  # Hz
 
 # =======================
 # GUI FOLDER + NAME PROMPT
