@@ -24,10 +24,14 @@ A Python-based toolbox using  **FLIR/Blackfly** camera, initially for neuroscien
 
 ## Feldman Lab - installation cabling 
 
-##
+
 Vout ( adafruit MCP4 4725) ----> Arduino AO0 + Arduino ground
 TDT start signal ---> Arduino Digital port 2 + Arduino ground
-                ++ --->  Camera green cable ( line3)             
+                ++ --->  Camera line 3 ( green cable on the HIROSE 6pins ) + ground   
+USB Serial communication Arduino ---> Igor computer  ( check COM port)
+Camera USB to USB3 on Igor computer 
+
+  
 ---
 
 ## 🧰 Requirements
