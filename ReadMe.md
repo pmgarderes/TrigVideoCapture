@@ -22,16 +22,14 @@ A Python-based toolbox using  **FLIR/Blackfly** camera, initially for neuroscien
 | `main` (default)  | NI DAQ       | Reads analog line continuously (e.g. voltage-encoded trial number)    |
 | `arduino-version` | Arduino      | Reads decoded trial/stim values via serial from Arduino Mega 2560     |
 
-## Feldman Lab - installation cabling 
-
-
-Vout ( adafruit MCP4 4725) ----> Arduino AO0 + Arduino ground
-TDT start signal ---> Arduino Digital port 2 + Arduino ground
-                ++ --->  Camera line 3 ( green cable on the HIROSE 6pins ) + ground   
-USB Serial communication Arduino ---> Igor computer  ( check COM port)
-Camera USB to USB3 on Igor computer 
-
-  
+## 🔌 Feldman lab --- Hardware Connections 
+Signal Routing
+Source / Device	Destination	Notes
+Vout (Adafruit MCP4725 DAC)	→ Arduino A0 (analog input)	Common GND between DAC and Arduino
+TDT Start Signal	→ Arduino digital pin 2	Use a shared ground with the TDT system
+Arduino → Camera Trigger	→ Camera Line 3 (green wire on the Hirose 6-pin connector)	Connect Line 3 and Camera GND
+Arduino USB (Serial)	→ Acquisition Computer (Igor workstation)	Check COM port in Device Manager
+Camera USB 3.0	→ Acquisition Computer (same machine running the Python toolbox)	Plug directly into a USB 3.0 port for full bandwidth 
 ---
 
 ## 🧰 Requirements
