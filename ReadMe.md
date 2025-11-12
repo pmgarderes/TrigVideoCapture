@@ -22,18 +22,25 @@ A Python-based toolbox using  **FLIR/Blackfly** camera, initially for neuroscien
 | `main` (default)  | NI DAQ       | Reads analog line continuously (e.g. voltage-encoded trial number)    |
 | `arduino-version` | Arduino      | Reads decoded trial/stim values via serial from Arduino Mega 2560     |
 
+## Feldman Lab - installation cabling 
+
+##
+Vout ( adafruit MCP4 4725) ----> Arduino AO0 + Arduino ground
+TDT start signal ---> Arduino Digital port 2 + Arduino ground
+                ++ --->  Camera green cable ( line3)             
 ---
 
 ## 🧰 Requirements
 
 - Python 3.10 (conda recommended)
 - [FLIR Spinnaker SDK](https://www.flir.com/products/spinnaker-sdk/)
-- PySpin (installed from SDK)      ---- >> SEE BELOW additional instruction 
-- OpenCV
-- numpy
-- tkinter (bundled with Python)
-- For DAQ version: `nidaqmx`
-- For Arduino version: standard `pyserial`
+- PySpin (installed from SDK)      ---- >> SEE BELOW additional instruction
+- # installed with requirements: 
+  - OpenCV
+  - numpy
+  - tkinter (bundled with Python)
+  - For DAQ version: `nidaqmx`
+  - For Arduino version: standard `pyserial`
 
 
 ---
