@@ -23,13 +23,15 @@ A Python-based toolbox using  **FLIR/Blackfly** camera, initially for neuroscien
 | `arduino-version` | Arduino      | Reads decoded trial/stim values via serial from Arduino Mega 2560     |
 
 ## 🔌 Feldman lab --- Hardware Connections 
-Signal Routing
-Source / Device	Destination	Notes
-Vout (Adafruit MCP4725 DAC)	→ Arduino A0 (analog input)	Common GND between DAC and Arduino
-TDT Start Signal	→ Arduino digital pin 2	Use a shared ground with the TDT system
-Arduino → Camera Trigger	→ Camera Line 3 (green wire on the Hirose 6-pin connector)	Connect Line 3 and Camera GND
-Arduino USB (Serial)	→ Acquisition Computer (Igor workstation)	Check COM port in Device Manager
-Camera USB 3.0	→ Acquisition Computer (same machine running the Python toolbox)	Plug directly into a USB 3.0 port for full bandwidth 
+
+| Source / Device                   | Destination                                                            | Notes                                                    |
+| --------------------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------- |
+| **Vout** *(Adafruit MCP4725 DAC)* | → **Arduino** `A0` *(analog input)*                                    | Common **GND** between DAC and Arduino                   |
+| **TDT Start Signal**              | → **Arduino** digital pin **2**                                        | Use a **shared ground** with the TDT system              |
+| **Arduino → Camera Trigger**      | → **Camera Line 3** *(green wire on the Hirose 6-pin connector)*       | Connect **Line 3** and **Camera GND**                    |
+| **Arduino USB (Serial)**          | → **Acquisition Computer** *(Igor workstation)*                        | Check **COM port** in Device Manager                     |
+| **Camera USB 3.0**                | → **Acquisition Computer** *(same machine running the Python toolbox)* | Plug directly into a **USB 3.0 port** for full bandwidth |
+
 ---
 
 ## 🧰 Requirements
