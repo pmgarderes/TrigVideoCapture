@@ -110,7 +110,7 @@ def _put_hud(img, text, org=(10,25)):
 # ARDUINO  BACKGROUND THREAD
 # =======================
 class SerialDecoderReader(threading.Thread):
-    def __init__(self, port='COM4', baudrate=115200):
+    def __init__(self, port='COM9', baudrate=115200):
         super().__init__()
         self.serial_port = serial.Serial(port, baudrate, timeout=1)
         self.running = False
@@ -170,7 +170,7 @@ def main():
     # Start Serial Decoder Thread (Arduino)
     # -------------------------------
     try:
-        serial_thread = SerialDecoderReader(port='COm6', baudrate=115200)  # ✅ adjust COM port if needed!
+        serial_thread = SerialDecoderReader(port='COm9', baudrate=115200)  # ✅ adjust COM port if needed!
         serial_thread.start()
         print("Serial decoder thread started.")
     except Exception as e:

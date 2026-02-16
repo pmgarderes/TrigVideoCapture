@@ -22,6 +22,7 @@ DEFAULT_START_DIR = r"C:\Users\Behavior4\Documents\Camera_Recordings"
 # BASE_NAME = "PMtest2"
 DISPLAY_FPS = 20.0  # Live display
 
+ARDUINO_COMPORT = 6;
 # not in use 
 # DAQ_DEVICE = "Dev2"
 # DAQ_CHANNEL = "ai1"
@@ -146,7 +147,9 @@ def main():
     # Start Serial Decoder Thread (Arduino)
     # -------------------------------
     try:
-        serial_thread = SerialDecoderReader(port='COm6', baudrate=115200)  # ✅ adjust COM port if needed!
+        cport = 'COm' + str(ARDUINO_COMPORT) 
+        #serial_thread = SerialDecoderReader(port='COm6', baudrate=115200)  # ✅ adjust COM port if needed!
+        serial_thread = SerialDecoderReader(port=cport, baudrate=115200)  # COM port in parameters 
         serial_thread.start()
         print("Serial decoder thread started.")
     except Exception as e:
