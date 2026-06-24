@@ -1,104 +1,266 @@
 # 🧪 TrigVideoCapture Toolbox
 
-This is a Python-based toolbox for high-speed video acquisition with **FLIR/Blackfly USB3 cameras** using the **Spinnaker SDK (PySpin)**. It supports:
-Camera live display and aquisition with trigger and metadata information(DAQmx or arduino) 
-A Python-based toolbox using  **FLIR/Blackfly** camera, initially for neuroscience experiments
+A Python-based toolbox for high-speed video acquisition with **FLIR / Blackfly USB3 cameras** using the **Spinnaker SDK / PySpin**.
 
-- ✅ Real-time video display and recording
-- ✅ Timestamp logging for each frame
-- ✅ Dual analog input support:
-  - `NI DAQmx` (e.g. PCIe-6351)
-  - OR Arduino-based serial decoding of trial/stimulus signals
-- ✅ Auto-generated filenames and safe overwrite checks
-- ✅ CSV metadata logging
-- ✅ Optional split-recording (WIP)
+Initially developed for neuroscience experiments, this toolbox supports live camera display, video acquisition, frame timestamp logging, and trial/stimulus metadata logging from either **NI DAQmx** or an **Arduino serial decoder**.
+
+---
+
+## ✅ Features
+
+* Real-time video display
+* Video recording from FLIR / Blackfly cameras
+* Support for **1 or 2 cameras** with the flexible Arduino script
+* Timestamp logging for each acquired frame
+* Metadata logging to CSV
+* Arduino-based serial decoding of trial/stimulus signals
+* Optional NI DAQmx-based analog acquisition
+* Auto-generated filenames
+* Optional split-recording mode *(WIP)*
 
 ---
 
 ## 🚀 Usage Modes
 
-| Mode              | Input Device | Notes                                                                 |
-|-------------------|--------------|-----------------------------------------------------------------------|
-| `main` (default)  | NI DAQ       | Reads analog line continuously (e.g. voltage-encoded trial number)    |
-| `arduino-version` | Arduino      | Reads decoded trial/stim values via serial from Arduino Mega 2560     |
+| Script                                  | Input Device           | Camera Support            | Notes                                |
+| --------------------------------------- | ---------------------- | ------------------------- | ------------------------------------ |
+| `Display_Record_Arduino_1or2Cam_AIO.py` | Arduino serial decoder | 1 or 2 cameras            | Recommended flexible Arduino version |
+| `Display_Record_Arduino_AIO.py`         | Arduino serial decoder | 2 cameras                 | Older fixed dual-camera version      |
+| `Display_Record_DAQmx_AIO.py`           | NI DAQmx               | Depends on script version | Reads analog input continuously      |
 
-## 🔌 Feldman lab --- Hardware Connections 
+---
 
-| Source / Device                   | Destination                                                            | Notes                                                    |
-| --------------------------------- | ---------------------------------------------------------------------- | -------------------------------------------------------- |
-| **Vout** *(Adafruit MCP4725 DAC)* | → **Arduino** `A0` *(analog input)*                                    | Common **GND** between DAC and Arduino                   |
-| **TDT Start Signal**              | → **Arduino** digital pin **2**                                        | Use a **shared ground** with the TDT system              |
-| **Arduino → Camera Trigger**      | → **Camera Line 3** *(green wire on the Hirose 6-pin connector)*       | Connect **Line 3** and **Camera GND**                    |
-| **Arduino USB (Serial)**          | → **Acquisition Computer** *(Igor workstation)*                        | Check **COM port** in Device Manager                     |
-| **Camera USB 3.0**                | → **Acquisition Computer** *(same machine running the Python toolbox)* | Plug directly into a **USB 3.0 port** for full bandwidth |
+## 🔌 Feldman Lab — Minimal Hardware Connections
+
+### Camera acquisition
+
+| Source / Device           | Destination          | Notes                                                |
+| ------------------------- | -------------------- | ---------------------------------------------------- |
+| **Camera USB 3.0**        | Acquisition computer | Plug directly into a USB 3.0 port for full bandwidth |
+| **Second camera USB 3.0** | Acquisition computer | Only needed for two-camera setup                     |
+
+For a **single-camera setup**, connect only one camera.
+
+For a **two-camera setup**, connect both cameras before starting the Python script.
+
+---
+
+### Arduino trial/stimulus metadata
+
+| Source / Device                    | Destination             | Notes                                        |
+| ---------------------------------- | ----------------------- | -------------------------------------------- |
+| **Vout** from Adafruit MCP4725 DAC | Arduino `A0`            | Analog packet encoding trial/stimulus values |
+| **TDT Start Signal**               | Arduino digital pin `2` | Rising edge starts packet decoding           |
+| **TDT / DAC GND**                  | Arduino `GND`           | Required shared ground                       |
+| **Arduino USB**                    | Acquisition computer    | Used for serial communication with Python    |
+
+The Arduino decodes the analog packet and sends lines such as:
+
+```text
+TRIAL:12,STIM:3
+```
+
+The Python script reads these values through the serial port and stores them in the frame metadata CSV.
+
+---
+
+### Optional LED illumination control
+
+| Source / Device      | Destination                 | Notes                           |
+| -------------------- | --------------------------- | ------------------------------- |
+| Arduino `D9`         | LED 1 driver / MOSFET input | PWM output for LED 1            |
+| Arduino `D10`        | LED 2 driver / MOSFET input | PWM output for LED 2            |
+| Arduino `A2`         | Potentiometer 1 wiper       | Controls LED 1 intensity        |
+| Arduino `A4`         | Potentiometer 2 wiper       | Controls LED 2 intensity        |
+| Arduino `5V` / `GND` | Potentiometer side pins     | Potentiometer reference voltage |
+| Arduino `GND`        | LED driver ground           | Required shared ground          |
+
+The Arduino script also uses a door interlock:
+
+| Source / Device | Destination           | Notes               |
+| --------------- | --------------------- | ------------------- |
+| Door switch     | Arduino `D8` to `GND` | Uses `INPUT_PULLUP` |
+
+If no door switch is used during testing, connect:
+
+```text
+Arduino D8 → GND
+```
+
+Otherwise the Arduino will interpret the door as open and keep the LEDs off.
 
 ---
 
 ## 🧰 Requirements
 
-- Python 3.10 (conda recommended)
-- [FLIR Spinnaker SDK](https://www.flir.com/products/spinnaker-sdk/)
-- PySpin (installed from SDK)      ---- >> SEE BELOW additional instruction
-- # installed with requirements: 
-  - OpenCV
-  - numpy
-  - tkinter (bundled with Python)
-  - For DAQ version: `nidaqmx`
-  - For Arduino version: standard `pyserial`
-
+* Python 3.10
+* Conda recommended
+* FLIR Spinnaker SDK
+* PySpin, installed from the Spinnaker SDK Python wheel
+* OpenCV
+* NumPy
+* tkinter, usually bundled with Python
+* For Arduino version: `pyserial`
+* For DAQ version: `nidaqmx`
 
 ---
 
 ## 📦 Installation
 
-We recommend creating a conda environment  :
-in an anaconda command prompt ( !!! start promtp as administrator on windows !!!), type: 
+Create and activate a conda environment.
+
+On Windows, open an **Anaconda Prompt as administrator**:
 
 ```bash
 conda create -n TrigVideoCapture python=3.10
 conda activate TrigVideoCapture
-cd PathToThetoolbox
-# recommend installing spinnaker sdk at that moment 
+cd PathToTheToolbox
+```
+
+Install the Spinnaker Python wheel.
+
+Example:
+
+```bash
 pip install "YOURPATH\spinnaker_python-4.2.0.88-cp310-cp310-win_amd64.whl"
-# test installation pf PySpin
+```
+
+Test PySpin installation:
+
+```bash
 python -c "import PySpin; print('PySpin OK')"
 ```
 
+Then install the remaining Python requirements:
 
----
-
-
-```bash 
+```bash
 pip install -r requirements.txt
 ```
 
 ---
 
+## ⚙️ Camera Configuration
 
-## 🚀  Use
+Camera parameters such as:
 
-Camera is fully parametrized in Spinnaker SDK GUI (frame rate, exposure time, etc... ) 
-After activation of the environment in the anaconda command prompt :
+* frame rate
+* exposure time
+* gain
+* image size / ROI
+* trigger mode, if used
+
+should be configured in the **Spinnaker SDK GUI** before running the acquisition script.
+
+The Python script records video at the camera framerate configured in Spinnaker.
+
+---
+
+## 🚀 Running the Toolbox
+
+Activate the environment:
 
 ```bash
 conda activate TrigVideoCapture
-cd PathToThetoolbox
+cd PathToTheToolbox
 ```
 
-run the file accorindng to your setup
+### Recommended Arduino version: 1 or 2 cameras
+
+```bash
+python Display_Record_Arduino_1or2Cam_AIO.py
+```
+
+This script automatically detects the number of connected cameras.
+
+* If one camera is connected, it records one video.
+* If two or more cameras are connected, it records the first two cameras.
+* Each camera is saved as a separate video file.
+
+Example output files:
+
+```text
+MySession_cam0.avi
+MySession_cam1.avi
+MySession.csv
+MySession_Analog.csv
+```
+
+For a single-camera setup, only `MySession_cam0.avi` is created.
+
+---
+
+### Older Arduino dual-camera version
 
 ```bash
 python Display_Record_Arduino_AIO.py
 ```
 
-or
+This version expects two cameras.
+
+---
+
+### NI DAQmx version
 
 ```bash
 python Display_Record_DAQmx_AIO.py
 ```
 
-The software will prompt you to choose a folder and filename to save output. 
-A window will open with 20Hz dipslay, and camera video is saved at the set framerate ( set in spinnaker SDK) an additional metadata file is daved along with the video with the same name 
+Use this version if metadata are acquired through an NI DAQ device instead of the Arduino serial decoder.
 
-to exit the program, simply press "q" with the video display window active 
-emergency stop the program by pressing Ctrl-C in the command bash  
+---
+
+## 💾 Output Files
+
+When the program starts, it will ask you to:
+
+1. choose an output folder
+2. enter a base filename
+
+The toolbox then creates:
+
+| File                   | Description                        |
+| ---------------------- | ---------------------------------- |
+| `BASE_NAME_cam0.avi`   | Video from camera 0                |
+| `BASE_NAME_cam1.avi`   | Video from camera 1, if present    |
+| `BASE_NAME.csv`        | Frame-by-frame metadata            |
+| `BASE_NAME_Analog.csv` | Arduino-decoded trial/stimulus log |
+
+The metadata CSV contains frame timestamps and trial/stimulus values decoded from Arduino serial communication.
+
+---
+
+## 🛑 Stopping Acquisition
+
+To stop recording normally:
+
+```text
+Press q while the video display window is active
+```
+
+For emergency stop:
+
+```text
+Press Ctrl+C in the command prompt
+```
+
+---
+
+## ⚠️ Notes
+
+* Use a direct USB 3.0 connection for each camera when possible.
+* Avoid USB hubs unless they are known to support the required bandwidth.
+* Make sure the Arduino COM port and baudrate in the Python script match the Arduino.
+* The Arduino script uses:
+
+```cpp
+Serial.begin(115200);
+```
+
+so the Python baudrate should usually be:
+
+```python
+SERIAL_BAUDRATE = 115200
+```
+
+* On Windows, check the Arduino COM port in Device Manager.
+* The flexible 1-or-2-camera script includes safe overwrite checks for the actual output video names.
