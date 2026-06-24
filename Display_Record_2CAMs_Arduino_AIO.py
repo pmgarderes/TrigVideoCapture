@@ -44,20 +44,32 @@ if not BASE_NAME:
 # =======================
 # FILE PATHS
 # =======================
-VIDEO_FILENAME = BASE_NAME + ".avi"
 FRAME_CSV_FILENAME = BASE_NAME + ".csv"
 ANALOG_CSV_FILENAME = BASE_NAME + "_Analog.csv"
 
-video_path = os.path.join(OUTPUT_DIR, VIDEO_FILENAME)
+# Actual video filenames used later by the script
+VIDEO_FILENAME0 = BASE_NAME + "_cam0.avi"
+VIDEO_FILENAME1 = BASE_NAME + "_cam1.avi"
+
+video_path0 = os.path.join(OUTPUT_DIR, VIDEO_FILENAME0)
+video_path1 = os.path.join(OUTPUT_DIR, VIDEO_FILENAME1)
 frame_csv_path = os.path.join(OUTPUT_DIR, FRAME_CSV_FILENAME)
 analog_csv_path = os.path.join(OUTPUT_DIR, ANALOG_CSV_FILENAME)
 
 # =======================
 # CHECK FOR EXISTING FILES
 # =======================
-existing_files = [f for f in [video_path, frame_csv_path, analog_csv_path] if os.path.exists(f)]
+existing_files = [
+    f for f in [video_path0, video_path1, frame_csv_path, analog_csv_path]
+    if os.path.exists(f)
+]
+
 if existing_files:
-    msg = "The following files already exist:\n\n" + "\n".join(existing_files) + "\n\nOverwrite?"
+    msg = (
+        "The following files already exist:\n\n"
+        + "\n".join(existing_files)
+        + "\n\nOverwrite?"
+    )
     if not messagebox.askyesno("Confirm Overwrite", msg):
         print("❌ Aborting to prevent overwrite.")
         exit()
