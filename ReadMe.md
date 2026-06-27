@@ -107,28 +107,42 @@ Otherwise the Arduino will interpret the door as open and keep the LEDs off.
 
 ## 📦 Installation
 
-Create and activate a conda environment.
+This has only been tested on Windows machines, but should in principle run on other OS
+
+You first need to install Spinnaker (https://www.teledynevisionsolutions.com/support/support-center/software-firmware-downloads/iis/spinnaker-sdk-download/spinnaker-sdk--download-files/)
+Currently( June 2026) the download includes an .exe to install Spinnaker and some compressed wheel files  that allows to install SDK for python (e.g. spinnaker_python-3.2.0.65-cp310-cp310-win_amd64.whl)
+
+During the installation of Spinnaker, installing only the spinView program is sufficicent, it will allow you to choose the camera parameters (exposure, frame rate etc...) 
+
+
+Create and activate a conda environment. ( I use miniconda) 
 
 On Windows, open an **Anaconda Prompt as administrator**:
+and type all of the following: 
 
 ```bash
-conda create -n TrigVideoCapture python=3.10
+conda create -n TrigVideoCapture python=3.10 -y
 conda activate TrigVideoCapture
-cd PathToTheToolbox
 ```
 
-Install the Spinnaker Python wheel.
-
-Example:
-
 ```bash
-pip install "YOURPATH\spinnaker_python-4.2.0.88-cp310-cp310-win_amd64.whl"
+python -m pip install --upgrade pip setuptools wheel
+python -m pip install numpy==1.23.5 pandas pyserial opencv-python
+Install the Spinnaker Python wheel.
+```
+
+
+install PySpin, the FLIR SDK, from the wheeler . it needs to match your OS (win_amd64) , python in the conda (3.10), and normally version of Spinnaker just installed (3.2.0.65)0
+
+Example: Change the path to wherever your wheel is.
+```bash
+pip install "C:\...\USER\download\spinnaker_python-3.2.0.65-cp310-cp310-win_amd64.whl"
 ```
 
 Test PySpin installation:
 
 ```bash
-python -c "import PySpin; print('PySpin OK')"
+python -c "import PySpin; print('PySpin file:', PySpin.__file__); print('Has System:', hasattr(PySpin, 'System')); print(PySpin.System)"
 ```
 
 Then install the remaining Python requirements:
@@ -157,7 +171,7 @@ The Python script records video at the camera framerate configured in Spinnaker.
 
 ## 🚀 Running the Toolbox
 
-Activate the environment:
+Activate the environment and go in the folder where this github code lives: 
 
 ```bash
 conda activate TrigVideoCapture
